@@ -215,6 +215,18 @@
     border-color:var(--azul);
     box-shadow: 0 0 0 3px rgba(10,104,167,0.15);
   }
+  /* estado de campo inválido */
+  input.invalido{
+    border-color:var(--erro);
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+  }
+  .erro-campo{
+    display:none;
+    font-size:12.5px;
+    color:var(--erro);
+    margin-top:5px;
+    font-weight:600;
+  }
   select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%234a5560' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
   .ajuda{ font-size:12.5px; color:var(--cinza-400); margin-top:5px; }
   /* upload de currículo */
@@ -311,7 +323,8 @@
 <main>
   <div class="card">
     <form id="form-candidatura" novalidate>
-      <div class="secao-titulo">Dados pessoais</div>
+      <!-- ===== BLOCO 1: INFORMAÇÕES PESSOAIS ===== -->
+      <div class="secao-titulo">Informações pessoais</div>
       <div class="grupo">
         <label for="nome">Nome completo <span class="obrig">*</span></label>
         <input type="text" id="nome" name="nome" required autocomplete="name">
@@ -319,24 +332,18 @@
       <div class="linha-dupla">
         <div class="grupo">
           <label for="celular">Celular <span class="obrig">*</span></label>
-          <input type="tel" id="celular" name="celular" placeholder="(00) 00000-0000" required autocomplete="tel">
+          <input type="tel" id="celular" name="celular" placeholder="(00) 00000-0000" inputmode="numeric" maxlength="15" required autocomplete="tel">
+          <div class="erro-campo" id="erro-celular">Informe um celular válido com DDD (11 dígitos).</div>
         </div>
         <div class="grupo">
           <label for="email">E-mail <span class="obrig">*</span></label>
-          <input type="email" id="email" name="email" required autocomplete="email">
+          <input type="email" id="email" name="email" placeholder="fulano@empresa.com.br" required autocomplete="email">
+          <div class="erro-campo" id="erro-email">Informe um e-mail válido (ex: fulano@empresa.com.br).</div>
         </div>
       </div>
       <div class="check-linha">
         <input type="checkbox" id="aceitaWhatsapp" name="aceitaWhatsapp">
         <p>Aceito receber contato e comunicações sobre este processo seletivo via WhatsApp.</p>
-      </div>
-      <div class="secao-titulo">Vaga e localização</div>
-      <div class="grupo">
-        <label for="vaga">Vaga desejada <span class="obrig">*</span></label>
-        <select id="vaga" name="vaga" required>
-          <option value="" disabled selected>Carregando vagas disponíveis...</option>
-        </select>
-        <p class="ajuda" id="vaga-status"></p>
       </div>
       <div class="linha-dupla">
         <div class="grupo">
@@ -364,13 +371,24 @@
         </div>
         <div class="grupo">
           <label for="cep">CEP <span class="obrig">*</span></label>
-          <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+          <input type="text" id="cep" name="cep" placeholder="00000-000" inputmode="numeric" maxlength="9" required>
+          <div class="erro-campo" id="erro-cep">Informe um CEP válido com 8 dígitos.</div>
         </div>
+      </div>
+      <!-- ===== BLOCO 2: INFORMAÇÕES SOBRE A VAGA ===== -->
+      <div class="secao-titulo">Informações sobre a vaga</div>
+      <div class="grupo">
+        <label for="vaga">Vaga desejada <span class="obrig">*</span></label>
+        <select id="vaga" name="vaga" required>
+          <option value="" disabled selected>Carregando vagas disponíveis...</option>
+        </select>
+        <p class="ajuda" id="vaga-status"></p>
       </div>
       <div class="grupo">
         <label for="pretensao">Pretensão salarial <span class="obrig">*</span></label>
-        <input type="text" id="pretensao" name="pretensao" placeholder="Ex: R$ 1.000,00" required>
+        <input type="text" id="pretensao" name="pretensao" placeholder="Ex: 1.000,00" inputmode="numeric" required>
       </div>
+      <!-- ===== BLOCO 3: CURRÍCULO ===== -->
       <div class="secao-titulo">Currículo</div>
       <div class="grupo">
         <label>Envie seu currículo (em PDF) <span class="obrig">*</span></label>
@@ -406,6 +424,69 @@
     document.getElementById('tela-formulario').style.display = 'block';
     window.scrollTo(0, 0);
   });
+
+  // ===================== MÁSCARAS E VALIDAÇÕES =====================
+  const campoCelular = document.getElementById('celular');
+  const campoEmail   = document.getElementById('email');
+  const campoCep     = document.getElementById('cep');
+  const campoPretensao = document.getElementById('pretensao');
+
+  // (1) CELULAR: máscara automática (XX) XXXXX-XXXX, aceita só números, exige 11 dígitos
+  campoCelular.addEventListener('input', () => {
+    let d = campoCelular.value.replace(/\D/g, '').slice(0, 11); // só dígitos, máx 11
+    let out = '';
+    if(d.length > 0) out = '(' + d.slice(0, 2);
+    if(d.length >= 2) out += ') ';
+    if(d.length > 2) out += d.slice(2, 7);
+    if(d.length >= 8) out += '-' + d.slice(7, 11);
+    campoCelular.value = out;
+    limparErro(campoCelular, 'erro-celular');
+  });
+  function celularValido(){
+    return campoCelular.value.replace(/\D/g, '').length === 11;
+  }
+
+  // (2) E-MAIL: validação de formato padrão
+  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  campoEmail.addEventListener('input', () => limparErro(campoEmail, 'erro-email'));
+  function emailValido(){
+    return regexEmail.test(campoEmail.value.trim());
+  }
+
+  // (4) CEP: máscara automática 00000-000, aceita só números, máx 8 dígitos
+  campoCep.addEventListener('input', () => {
+    let d = campoCep.value.replace(/\D/g, '').slice(0, 8);
+    let out = d.slice(0, 5);
+    if(d.length > 5) out += '-' + d.slice(5, 8);
+    campoCep.value = out;
+    limparErro(campoCep, 'erro-cep');
+  });
+  function cepValido(){
+    return campoCep.value.replace(/\D/g, '').length === 8;
+  }
+
+  // (5) PRETENSÃO SALARIAL: máscara monetária automática XX.XXX,XX
+  campoPretensao.addEventListener('input', () => {
+    let d = campoPretensao.value.replace(/\D/g, '');
+    if(d === ''){ campoPretensao.value = ''; return; }
+    d = d.replace(/^0+(?=\d)/, '');            // remove zeros à esquerda
+    while(d.length < 3) d = '0' + d;           // garante ao menos os centavos
+    let centavos = d.slice(-2);
+    let inteiros = d.slice(0, -2);
+    inteiros = inteiros.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // separador de milhar
+    campoPretensao.value = inteiros + ',' + centavos;
+  });
+
+  // Helper: destaca/limpa erro de um campo
+  function marcarErro(campo, idMsg){
+    campo.classList.add('invalido');
+    document.getElementById(idMsg).style.display = 'block';
+  }
+  function limparErro(campo, idMsg){
+    campo.classList.remove('invalido');
+    document.getElementById(idMsg).style.display = 'none';
+  }
+
   // ====== CONFIGURAÇÃO: cole aqui as URLs geradas pelos fluxos do Power Automate ======
   const URL_LISTAR_VAGAS = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/26/workflows/62c4dc8f2c8f45d6960ff81512523d8d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GBqw0Mr3cUU_7gGlWdWd3h8DXc7HO8i54ZkPyxGOqXw";
   const URL_ENVIAR_CANDIDATURA = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/19/workflows/463eb3cdec7740c58896f0cee3d11bd2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=70aCvnvOWXqbNAUsvK2J8iDzWU8AVuIZR3qEkC_2Ytg";
@@ -440,6 +521,8 @@
   const uploadArea = document.getElementById('upload-area');
   const inputArquivo = document.getElementById('curriculo');
   const nomeArquivoEl = document.getElementById('nome-arquivo');
+  const msgSucesso = document.getElementById('msg-sucesso');
+  const msgErro = document.getElementById('msg-erro');
   uploadArea.addEventListener('click', () => inputArquivo.click());
   // Mostra o nome do arquivo selecionado (clique ou arraste)
   function mostrarArquivoSelecionado(){
@@ -502,8 +585,6 @@
   }
   const form = document.getElementById('form-candidatura');
   const botaoEnviar = document.getElementById('botao-enviar');
-  const msgSucesso = document.getElementById('msg-sucesso');
-  const msgErro = document.getElementById('msg-erro');
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     msgSucesso.style.display = 'none';
@@ -514,10 +595,27 @@
       form.reset();
       return;
     }
+
+    // ===== Validações personalizadas (celular, e-mail, CEP) =====
+    let temErro = false;
+    limparErro(campoCelular, 'erro-celular');
+    limparErro(campoEmail, 'erro-email');
+    limparErro(campoCep, 'erro-cep');
+    if(!celularValido()){ marcarErro(campoCelular, 'erro-celular'); temErro = true; }
+    if(!emailValido()){ marcarErro(campoEmail, 'erro-email'); temErro = true; }
+    if(!cepValido()){ marcarErro(campoCep, 'erro-cep'); temErro = true; }
+
     if(!form.checkValidity()){
       form.reportValidity();
       return;
     }
+    if(temErro){
+      // rola até o primeiro campo com erro
+      const primeiro = document.querySelector('.invalido');
+      if(primeiro) primeiro.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+
     const arquivo = inputArquivo.files[0];
     if(!arquivo){
       msgErro.textContent = 'Selecione o arquivo do currículo em PDF.';
