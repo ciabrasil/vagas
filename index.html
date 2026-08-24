@@ -388,6 +388,11 @@
         <label for="pretensao">Pretensão salarial (ou faixa salarial atual) <span class="obrig">*</span></label>
         <input type="text" id="pretensao" name="pretensao" placeholder="Ex: 1.000,00" inputmode="numeric" required>
       </div>
+      <div class="grupo">
+        <label for="ultimoCargo">Último cargo <span class="obrig">*</span></label>
+        <input type="text" id="ultimoCargo" name="ultimoCargo" placeholder="Ex: Assistente Administrativo" required>
+        <p class="ajuda">Informe o cargo mais recente que você ocupou.</p>
+</div>
       <!-- ===== BLOCO 3: CURRÍCULO ===== -->
       <div class="secao-titulo">Currículo</div>
       <div class="grupo">
@@ -647,6 +652,7 @@
         endereco: document.getElementById('endereco').value.trim(),
         cep: document.getElementById('cep').value.trim(),
         pretensaoSalarial: document.getElementById('pretensao').value.trim(),
+        ultimoCargo: document.getElementById('ultimoCargo').value.trim(),
         aceitaLgpd: document.getElementById('aceitaLgpd').checked,
         nomeArquivoCurriculo: arquivo.name,
         curriculoBase64: curriculoBase64,
