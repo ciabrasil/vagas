@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trabalhe Conosco | Ciabrasil Engenharia</title>
+<style>
+  :root{
+    --azul: #0A68A7;
+    --azul-escuro: #084d7d;
+    --verde: #AFCA0A;
+    --verde-escuro: #8fa808;
+    --cinza-900: #1c2226;
+    --cinza-700: #4a5560;
+    --cinza-400: #8b96a1;
+    --cinza-100: #eef1f3;
+    --branco: #ffffff;
+    --erro: #c0392b;
+    --radius: 10px;
+    --font-display: 'Fira Sans', 'Segoe UI', sans-serif;
+    --font-body: 'Fira Sans', 'Segoe UI', sans-serif;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--cinza-100);
+    color:var(--cinza-900);
+  }
+  /* ---------- Logo ---------- */
+  .logo-marca{
+    height:46px;
+    width:auto;
+    display:block;
+  }
+  .capa-conteudo .logo-marca{
+    height:60px;
+    margin:0 auto 26px;
+  }
+  header.topo .logo-marca{
+    height:44px;
+    margin-bottom:6px;
+  }
+  /* ---------- Página de rosto (capa) ---------- */
+  .tela-capa{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(135deg, var(--azul) 0%, var(--azul-escuro) 100%);
+    position:relative;
+    overflow:hidden;
+    padding: 40px 20px;
+  }
+  .tela-capa::before{
+    content:"";
+    position:absolute;
+    right:-80px; top:-100px;
+    width:340px; height:340px;
+    background:var(--verde);
+    opacity:0.15;
+    border-radius:50%;
+  }
+  .tela-capa::after{
+    content:"";
+    position:absolute;
+    left:-100px; bottom:-120px;
+    width:300px; height:300px;
+    background:var(--verde);
+    opacity:0.1;
+    border-radius:50%;
+  }
+  .capa-conteudo{
+    max-width:600px;
+    text-align:center;
+    position:relative;
+    z-index:1;
+  }
+  .capa-conteudo .marca{
+    justify-content:center;
+    margin-bottom:22px;
+  }
+  .capa-conteudo h1{
+    color:var(--branco);
+    font-family:var(--font-display);
+    font-size:clamp(30px,5vw,44px);
+    margin:0 0 18px;
+    font-weight:700;
+    line-height:1.15;
+  }
+  .capa-conteudo p{
+    color:#dcebf6;
+    font-size:16.5px;
+    line-height:1.6;
+    margin:0 0 34px;
+  }
+  .botao-avancar{
+    background:var(--verde);
+    color:var(--azul-escuro);
+    border:none;
+    padding:16px 34px;
+    font-size:16px;
+    font-weight:700;
+    border-radius:8px;
+    cursor:pointer;
+    font-family:inherit;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .botao-avancar:hover{ background:#c3dd1a; transform:translateY(-1px); }
+  /* ---------- Tela do formulário ---------- */
+  .tela-formulario{ display:none; }
+  header.topo{
+    background: linear-gradient(120deg, var(--azul) 0%, var(--azul-escuro) 100%);
+    padding: 34px 20px 46px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.topo::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-60px;
+    width:220px; height:220px;
+    background:var(--verde);
+    opacity:0.15;
+    border-radius:50%;
+  }
+  .topo-conteudo{
+    max-width:760px;
+    margin:0 auto;
+    position:relative;
+    z-index:1;
+  }
+  .marca{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--branco);
+    font-weight:700;
+    letter-spacing:0.5px;
+    font-size:15px;
+    text-transform:uppercase;
+  }
+  .marca .barra{
+    width:26px; height:4px;
+    background:var(--verde);
+    border-radius:2px;
+    display:inline-block;
+  }
+  h1{
+    color:var(--branco);
+    font-family:var(--font-display);
+    font-size:clamp(24px,4vw,30px);
+    margin:14px 0 0;
+    font-weight:700;
+  }
+  main{
+    max-width:760px;
+    margin: 32px auto 60px;
+    padding: 0 20px;
+    position:relative;
+    z-index:2;
+  }
+  .card{
+    background:var(--branco);
+    border-radius:var(--radius);
+    box-shadow: 0 12px 30px rgba(10,104,167,0.12);
+    padding: 34px 32px;
+  }
+  .secao-titulo{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+    font-weight:700;
+    color:var(--azul);
+    margin: 26px 0 14px;
+    border-bottom:2px solid var(--cinza-100);
+    padding-bottom:8px;
+  }
+  .secao-titulo:first-child{ margin-top:0; }
+  .grupo{ margin-bottom:18px; }
+  .linha-dupla{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width: 560px){
+    .linha-dupla{ grid-template-columns: 1fr; }
+    .card{ padding:26px 20px; }
+  }
+  label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--cinza-700);
+    margin-bottom:6px;
+  }
+  label .obrig{ color:var(--erro); }
+  input[type=text],
+  input[type=tel],
+  input[type=email],
+  input[type=number],
+  select{
+    width:100%;
+    padding:11px 13px;
+    border:1.5px solid #d7dde2;
+    border-radius:8px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--cinza-900);
+    background:var(--branco);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--azul);
+    box-shadow: 0 0 0 3px rgba(10,104,167,0.15);
+  }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%234a5560' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
+  .ajuda{ font-size:12.5px; color:var(--cinza-400); margin-top:5px; }
+  /* upload de currículo */
+  .upload-area{
+    border:1.5px dashed #c3cdd4;
+    border-radius:8px;
+    padding:20px 16px;
+    text-align:center;
+    background:#fafcfd;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .upload-area:hover{ border-color:var(--azul); background:#f2f8fc; }
+  .upload-area.arrastando{ border-color:var(--azul); background:#e8f3fb; border-style:solid; }
+  .upload-area.tem-arquivo{ border-color:var(--verde-escuro); background:#f8fbe9; }
+  .upload-area input[type=file]{ display:none; }
+  .upload-texto{ font-size:14px; color:var(--cinza-700); }
+  .upload-texto strong{ color:var(--azul); }
+  .upload-nome-arquivo{ font-size:13.5px; font-weight:600; color:var(--verde-escuro); margin-top:8px; }
+  /* checkboxes */
+  .check-linha{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:#f6f9fb;
+    border-radius:8px;
+    padding:13px 14px;
+    margin-top:6px;
+  }
+  .check-linha input[type=checkbox]{
+    margin-top:3px;
+    width:17px; height:17px;
+    accent-color:var(--azul);
+    flex-shrink:0;
+  }
+  .check-linha p{
+    margin:0;
+    font-size:13.5px;
+    line-height:1.5;
+    color:var(--cinza-700);
+  }
+  .check-linha.lgpd{ background:#eef6e6; border:1px solid #dcecc6; }
+  button.enviar{
+    width:100%;
+    margin-top:28px;
+    background:var(--azul);
+    color:var(--branco);
+    border:none;
+    padding:15px;
+    font-size:16px;
+    font-weight:700;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+    font-family:inherit;
+  }
+  button.enviar:hover{ background:var(--azul-escuro); }
+  button.enviar:disabled{ background:#a9c1d1; cursor:not-allowed; }
+  .mensagem{
+    margin-top:16px;
+    padding:13px 15px;
+    border-radius:8px;
+    font-size:14px;
+    display:none;
+  }
+  .mensagem.sucesso{ background:#f0f8e0; color:#5a6b0a; border:1px solid var(--verde); }
+  .mensagem.erro{ background:#fbeaea; color:var(--erro); border:1px solid #f0b3ac; }
+  footer{
+    text-align:center;
+    color:var(--cinza-400);
+    font-size:12.5px;
+    padding: 10px 20px 40px;
+  }
+  /* honeypot - invisível para humanos */
+  .campo-oculto{ position:absolute; left:-9999px; top:-9999px; }
+</style>
+</head>
+<body>
+<div class="tela-capa" id="tela-capa">
+  <div class="capa-conteudo">
+    <img src="logo-ciabrasil-branco.png" alt="Ciabrasil Engenharia" class="logo-marca">
+    <h1>Trabalhe Conosco</h1>
+    <p>Estamos sempre em busca de pessoas que queiram crescer com a gente. Preencha seus dados, anexe seu currículo e concorra às vagas abertas na Ciabrasil Engenharia. Leva só alguns minutos.</p>
+    <button type="button" class="botao-avancar" id="botao-avancar">Iniciar candidatura →</button>
+  </div>
+</div>
+<div class="tela-formulario" id="tela-formulario">
+<header class="topo">
+  <div class="topo-conteudo">
+    <img src="logo-ciabrasil-branco.png" alt="Ciabrasil Engenharia" class="logo-marca">
+    <h1>Trabalhe Conosco</h1>
+  </div>
+</header>
+<main>
+  <div class="card">
+    <form id="form-candidatura" novalidate>
+      <div class="secao-titulo">Dados pessoais</div>
+      <div class="grupo">
+        <label for="nome">Nome completo <span class="obrig">*</span></label>
+        <input type="text" id="nome" name="nome" required autocomplete="name">
+      </div>
+      <div class="linha-dupla">
+        <div class="grupo">
+          <label for="celular">Celular <span class="obrig">*</span></label>
+          <input type="tel" id="celular" name="celular" placeholder="(00) 00000-0000" required autocomplete="tel">
+        </div>
+        <div class="grupo">
+          <label for="email">E-mail <span class="obrig">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+      </div>
+      <div class="check-linha">
+        <input type="checkbox" id="aceitaWhatsapp" name="aceitaWhatsapp">
+        <p>Aceito receber contato e comunicações sobre este processo seletivo via WhatsApp.</p>
+      </div>
+      <div class="secao-titulo">Vaga e localização</div>
+      <div class="grupo">
+        <label for="vaga">Vaga desejada <span class="obrig">*</span></label>
+        <select id="vaga" name="vaga" required>
+          <option value="" disabled selected>Carregando vagas disponíveis...</option>
+        </select>
+        <p class="ajuda" id="vaga-status"></p>
+      </div>
+      <div class="linha-dupla">
+        <div class="grupo">
+          <label for="estado">Estado <span class="obrig">*</span></label>
+          <select id="estado" name="estado" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+            <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+            <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+            <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+            <option>SP</option><option>SE</option><option>TO</option>
+          </select>
+        </div>
+        <div class="grupo">
+          <label for="cidade">Cidade <span class="obrig">*</span></label>
+          <input type="text" id="cidade" name="cidade" required>
+        </div>
+      </div>
+      <div class="linha-dupla">
+        <div class="grupo">
+          <label for="endereco">Endereço <span class="obrig">*</span></label>
+          <input type="text" id="endereco" name="endereco" required>
+        </div>
+        <div class="grupo">
+          <label for="cep">CEP <span class="obrig">*</span></label>
+          <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+        </div>
+      </div>
+      <div class="grupo">
+        <label for="pretensao">Pretensão salarial <span class="obrig">*</span></label>
+        <input type="text" id="pretensao" name="pretensao" placeholder="Ex: R$ 1.000,00" required>
+      </div>
+      <div class="secao-titulo">Currículo</div>
+      <div class="grupo">
+        <label>Envie seu currículo (em PDF) <span class="obrig">*</span></label>
+        <div class="upload-area" id="upload-area">
+          <input type="file" id="curriculo" name="curriculo" accept="application/pdf" required>
+          <div class="upload-texto"><strong>Clique para selecionar</strong> ou arraste o arquivo PDF aqui</div>
+          <div class="upload-nome-arquivo" id="nome-arquivo"></div>
+        </div>
+        <p class="ajuda">Apenas arquivos PDF, tamanho máximo de 8 MB.</p>
+      </div>
+      <div class="secao-titulo">Consentimento (LGPD)</div>
+      <div class="check-linha lgpd">
+        <input type="checkbox" id="aceitaLgpd" name="aceitaLgpd" required>
+        <p>Declaro estar ciente e de acordo que a Ciabrasil Engenharia irá coletar e utilizar meus dados pessoais e o currículo enviado exclusivamente para fins deste e de futuros processos seletivos, em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018). <span class="obrig">*</span></p>
+      </div>
+      <!-- honeypot anti-spam: campo invisível, bots costumam preencher -->
+      <div class="campo-oculto" aria-hidden="true">
+        <label for="site">Não preencha este campo</label>
+        <input type="text" id="site" name="site" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="enviar" id="botao-enviar">Enviar candidatura</button>
+      <div class="mensagem sucesso" id="msg-sucesso">Candidatura enviada com sucesso! Obrigado pelo interesse em fazer parte da Ciabrasil Engenharia.</div>
+      <div class="mensagem erro" id="msg-erro">Não foi possível enviar sua candidatura. Verifique os campos e tente novamente.</div>
+    </form>
+  </div>
+</main>
+<footer>© Ciabrasil Engenharia — Seus dados são tratados conforme a LGPD.</footer>
+</div><!-- fim .tela-formulario -->
+<script>
+  // Alternar da capa para o formulário
+  document.getElementById('botao-avancar').addEventListener('click', () => {
+    document.getElementById('tela-capa').style.display = 'none';
+    document.getElementById('tela-formulario').style.display = 'block';
+    window.scrollTo(0, 0);
+  });
+  // ====== CONFIGURAÇÃO: cole aqui as URLs geradas pelos fluxos do Power Automate ======
+  const URL_LISTAR_VAGAS = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/26/workflows/62c4dc8f2c8f45d6960ff81512523d8d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=GBqw0Mr3cUU_7gGlWdWd3h8DXc7HO8i54ZkPyxGOqXw";
+  const URL_ENVIAR_CANDIDATURA = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/19/workflows/463eb3cdec7740c58896f0cee3d11bd2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=70aCvnvOWXqbNAUsvK2J8iDzWU8AVuIZR3qEkC_2Ytg";
+  // =======================================================================
+  const selectVaga = document.getElementById('vaga');
+  const vagaStatus = document.getElementById('vaga-status');
+  async function carregarVagas(){
+    try{
+      const resp = await fetch(URL_LISTAR_VAGAS);
+      if(!resp.ok) throw new Error('Falha ao buscar vagas');
+      const vagas = await resp.json();
+      selectVaga.innerHTML = '<option value="" disabled selected>Selecione a vaga</option>';
+      if(!Array.isArray(vagas) || vagas.length === 0){
+        selectVaga.innerHTML = '<option value="" disabled selected>Nenhuma vaga aberta no momento</option>';
+        return;
+      }
+      vagas.forEach(v => {
+        const nomeVaga = typeof v === 'string' ? v : (v.Vaga || v.vaga || '');
+        if(!nomeVaga) return;
+        const opt = document.createElement('option');
+        opt.value = nomeVaga;
+        opt.textContent = nomeVaga;
+        selectVaga.appendChild(opt);
+      });
+    }catch(e){
+      selectVaga.innerHTML = '<option value="" disabled selected>Erro ao carregar vagas</option>';
+      vagaStatus.textContent = 'Não foi possível carregar a lista de vagas. Recarregue a página.';
+    }
+  }
+  carregarVagas();
+  // Upload de currículo — feedback visual
+  const uploadArea = document.getElementById('upload-area');
+  const inputArquivo = document.getElementById('curriculo');
+  const nomeArquivoEl = document.getElementById('nome-arquivo');
+  uploadArea.addEventListener('click', () => inputArquivo.click());
+  // Mostra o nome do arquivo selecionado (clique ou arraste)
+  function mostrarArquivoSelecionado(){
+    if(inputArquivo.files.length){
+      uploadArea.classList.add('tem-arquivo');
+      nomeArquivoEl.textContent = inputArquivo.files[0].name;
+    }else{
+      uploadArea.classList.remove('tem-arquivo');
+      nomeArquivoEl.textContent = '';
+    }
+  }
+  inputArquivo.addEventListener('change', mostrarArquivoSelecionado);
+  // ===== Arrastar e soltar (drag & drop) =====
+  ['dragenter','dragover'].forEach(evt => {
+    uploadArea.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadArea.classList.add('arrastando');
+    });
+  });
+  ['dragleave','dragend'].forEach(evt => {
+    uploadArea.addEventListener(evt, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      uploadArea.classList.remove('arrastando');
+    });
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    uploadArea.classList.remove('arrastando');
+    const arquivos = e.dataTransfer.files;
+    if(arquivos && arquivos.length){
+      const arquivo = arquivos[0];
+      if(arquivo.type !== 'application/pdf'){
+        msgErro.textContent = 'O currículo deve estar em formato PDF.';
+        msgErro.style.display = 'block';
+        return;
+      }
+      // Transfere o arquivo solto para o input, para o formulário reconhecê-lo
+      const dt = new DataTransfer();
+      dt.items.add(arquivo);
+      inputArquivo.files = dt.files;
+      mostrarArquivoSelecionado();
+    }
+  });
+  // Evita que o navegador abra o PDF ao soltar fora da área
+  ['dragover','drop'].forEach(evt => {
+    window.addEventListener(evt, (e) => {
+      if(!uploadArea.contains(e.target)) e.preventDefault();
+    });
+  });
+  function arquivoParaBase64(arquivo){
+    return new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+      leitor.onload = () => resolve(leitor.result.split(',')[1]);
+      leitor.onerror = reject;
+      leitor.readAsDataURL(arquivo);
+    });
+  }
+  const form = document.getElementById('form-candidatura');
+  const botaoEnviar = document.getElementById('botao-enviar');
+  const msgSucesso = document.getElementById('msg-sucesso');
+  const msgErro = document.getElementById('msg-erro');
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    msgSucesso.style.display = 'none';
+    msgErro.style.display = 'none';
+    // honeypot: se preenchido, é bot — finge sucesso e não envia nada
+    if(document.getElementById('site').value){
+      msgSucesso.style.display = 'block';
+      form.reset();
+      return;
+    }
+    if(!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+    const arquivo = inputArquivo.files[0];
+    if(!arquivo){
+      msgErro.textContent = 'Selecione o arquivo do currículo em PDF.';
+      msgErro.style.display = 'block';
+      return;
+    }
+    if(arquivo.type !== 'application/pdf'){
+      msgErro.textContent = 'O currículo deve estar em formato PDF.';
+      msgErro.style.display = 'block';
+      return;
+    }
+    if(arquivo.size > 8 * 1024 * 1024){
+      msgErro.textContent = 'O arquivo deve ter no máximo 8 MB.';
+      msgErro.style.display = 'block';
+      return;
+    }
+    botaoEnviar.disabled = true;
+    botaoEnviar.textContent = 'Enviando...';
+    try{
+      const curriculoBase64 = await arquivoParaBase64(arquivo);
+      const payload = {
+        nome: document.getElementById('nome').value.trim(),
+        celular: document.getElementById('celular').value.trim(),
+        aceitaWhatsapp: document.getElementById('aceitaWhatsapp').checked,
+        email: document.getElementById('email').value.trim(),
+        vaga: document.getElementById('vaga').value,
+        estado: document.getElementById('estado').value,
+        cidade: document.getElementById('cidade').value.trim(),
+        endereco: document.getElementById('endereco').value.trim(),
+        cep: document.getElementById('cep').value.trim(),
+        pretensaoSalarial: document.getElementById('pretensao').value.trim(),
+        aceitaLgpd: document.getElementById('aceitaLgpd').checked,
+        nomeArquivoCurriculo: arquivo.name,
+        curriculoBase64: curriculoBase64,
+        dataHoraEnvio: new Date().toISOString()
+      };
+      const resp = await fetch(URL_ENVIAR_CANDIDATURA, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if(!resp.ok) throw new Error('Erro no envio');
+      msgSucesso.style.display = 'block';
+      form.reset();
+      uploadArea.classList.remove('tem-arquivo');
+      nomeArquivoEl.textContent = '';
+      carregarVagas();
+    }catch(e){
+      msgErro.style.display = 'block';
+    }finally{
+      botaoEnviar.disabled = false;
+      botaoEnviar.textContent = 'Enviar candidatura';
+    }
+  });
+</script>
+</body>
+</html>
